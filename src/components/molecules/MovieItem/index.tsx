@@ -4,8 +4,12 @@ import {
     MovieItemHighlightTag,
     MovieItemRating,
 } from "@/components/molecules/MovieItem/styles";
+import { MainMovie } from "@/components/services/tmdb";
+import { getTmdbPosterPathUrl } from "@/utils/tmdb";
+import prettyMilliseconds from "pretty-ms";
 import { LuFlame, LuPlay, LuStar } from "react-icons/lu";
 import styled from "styled-components";
+import { Movie } from "tmdb-ts";
 
 const Container = styled.div`
     position: relative;
@@ -25,7 +29,7 @@ const Container = styled.div`
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.5;
+            opacity: 0.7;
         }
     }
 
@@ -41,23 +45,44 @@ const Container = styled.div`
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
+            opacity: 1;
         }
+    }
+
+    &.carousel-item {
+        min-width: 21rem;
+        height: 15.85419rem;
     }
 `;
 
-export default function MovieItem({ url }: { url: string }) {
+export default function MovieItem({
+    className,
+    movie,
+    shouldUsePoster,
+}: {
+    className?: string;
+    movie: Movie;
+    shouldUsePoster?: boolean;
+}) {
     return (
-        <Container>
+        <Container className={className}>
             <div className="image-wrapper">
-                <img src={url} alt="" />
+                <img
+                    src={getTmdbPosterPathUrl(
+                        shouldUsePoster
+                            ? movie.poster_path
+                            : movie.backdrop_path
+                    )}
+                    alt=""
+                />
             </div>
             <MovieItemContent>
                 <MovieItemRating>
                     <LuStar />
-                    7.8
+                    {movie.vote_average.toFixed(1)}
                 </MovieItemRating>
 
-                <h2 className="movie-name">Divertidamente 2</h2>
+                <h2 className="movie-name">{movie.title}</h2>
                 <ButtonWithIcon className="watch-trailer">
                     Assistir ao trailer <LuPlay />
                 </ButtonWithIcon>
@@ -66,11 +91,12 @@ export default function MovieItem({ url }: { url: string }) {
     );
 }
 
-export function MainMovieItem({ url }: { url: string }) {
+export function MainMovieItem({ movie }: { movie: MainMovie }) {
+    const movieRuntimeMs = movie.runtime * 60 * 1000
     return (
         <Container className={"main-item"}>
             <div className="image-wrapper">
-                <img src={url} alt="" />
+                <img src={getTmdbPosterPathUrl(movie.backdrop_path)} alt="" />
             </div>
             <MovieItemContent className="main-item">
                 <MovieItemHighlightTag className="no-margin">
@@ -78,27 +104,24 @@ export function MainMovieItem({ url }: { url: string }) {
                     Em destaque
                 </MovieItemHighlightTag>
 
-                <h2 className="movie-name">Deadpool & Wolverine</h2>
+                <h2 className="movie-name">{movie.title}</h2>
                 <div className="statistics-row">
                     <div className="row">
                         <MovieItemRating className="simple-rating">
                             <LuStar />
-                            7.8
+                            {movie.vote_average.toFixed(1)}
                         </MovieItemRating>
-                        <span>| 120 mil</span>
+                        <span>| {movie.vote_count}</span>
                     </div>
                     <div className="row-divider" />
-                    <span>2h 8m</span>
+                    <span>{prettyMilliseconds(movieRuntimeMs)}</span>
                     <div className="row-divider" />
-                    <span>Comedy, Action, Adventure, Superhero...</span>
+                    <span>{movie.genres.map(g => g.name).join(", ")}</span>
                     <div className="row-divider" />
                     <span>2024</span>
                 </div>
                 <p className="description">
-                    Deadpool recebe uma oferta da Autoridade de Variância
-                    Temporal para se juntar ao Universo Cinematográfico Marvel,
-                    mas em vez disso recruta uma variante do Wolverine para
-                    salvar seu universo da extinção.
+                    {movie.overview}
                 </p>
 
                 <ButtonWithIcon className="watch-trailer main-item">

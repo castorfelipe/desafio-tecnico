@@ -1,7 +1,12 @@
+import CarouselSection from "@/components/atoms/CarouselSection";
+import MovieItem, { MainMovieItem } from "@/components/molecules/MovieItem";
+import tmdb, { MainMovie } from "@/components/services/tmdb";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Movie, Person } from "tmdb-ts";
 import Navbar from "./components/molecules/Navbar";
 import "./global.css";
-import MovieItem, { MainMovieItem } from "@/components/molecules/MovieItem";
+import ActorItem from "@/components/molecules/ActorItem";
 
 const Container = styled.div`
     display: flex;
@@ -9,25 +14,11 @@ const Container = styled.div`
     padding: 1.5rem;
     height: 100%;
 
-    section {
+    section.main {
         display: flex;
         height: calc(100vh - 6rem);
         gap: 1rem;
         padding-top: 1rem;
-
-        /* .main-image-wrapper {
-            width: 75%;
-            overflow: hidden;
-            aspect-ratio: 1/1;
-            border-radius: 1.5rem;
-            height: 100%;
-            img {
-                height: 100%;
-                width: 100%;
-                aspect-ratio: 1/1;
-                object-fit: cover;
-            }
-        } */
 
         .column {
             flex-grow: 1;
@@ -57,21 +48,108 @@ const Container = styled.div`
             }
         }
     }
+
+    section.new-movies {
+    }
 `;
 
 function App() {
+    const [newMovies, setNewMovies] = useState<Movie[] | null>(null);
+    const [popularMovies, setPopularMovies] = useState<Movie[] | null>(null);
+    const [mainMovie, setMainMovie] = useState<MainMovie | null>(null);
+    const [actors, setActors] = useState<Person[] | null>(null);
+
+    const fetchData = async () => {
+        const newMoviesResponse = await tmdb.movies.nowPlaying({
+            language: "pt-BR",
+            page: 1,
+        });
+
+        setNewMovies(newMoviesResponse.results);
+
+        const popularMoviesResponse = await tmdb.movies.popular({
+            language: "pt-BR",
+            page: 1,
+        });
+
+        setPopularMovies(popularMoviesResponse.results);
+
+        const mainMovieResponse = await tmdb.movies.details(
+            popularMoviesResponse.results[0].id,
+            [],
+            "pt-BR"
+        );
+
+        setMainMovie(mainMovieResponse);
+
+        const actors = await tmdb.people.popular({
+            language: "pt-BR",
+            page: 1,
+        });
+
+        setActors(actors.results);
+    };
+
+    // console.log(mainMovie);
+
+    useEffect(() => {
+        if (newMovies) return;
+        fetchData();
+    }, []);
+
     return (
         <Container>
             <Navbar />
-            <section>
-                <MainMovieItem url="https://i.nuuls.com/y7tQF.png" />
+
+            <section className="main">
+                {mainMovie && <MainMovieItem movie={mainMovie} />}
+
                 <div className="column">
                     <h2 className="column-title">Destaques também</h2>
-                    <MovieItem url="https://i.nuuls.com/TVTbI.png" />
-                    <MovieItem url="https://i.nuuls.com/TVTbI.png" />
-                    <MovieItem url="https://i.nuuls.com/TVTbI.png" />
+                    {popularMovies &&
+                        popularMovies
+                            .slice(1, 4)
+                            .map((movie) => (
+                                <MovieItem movie={movie} key={movie.id} />
+                            ))}
                 </div>
             </section>
+
+            {newMovies && (
+                <section className="new-movies">
+                    <CarouselSection title="Lançamentos">
+                        {newMovies.map((movie) => (
+                            <MovieItem
+                                movie={movie}
+                                key={movie.id}
+                                className="carousel-item"
+                            />
+                        ))}
+                    </CarouselSection>
+                </section>
+            )}
+
+            {actors && (
+                <section className="actors">
+                    <CarouselSection title="Celebridades">
+                        {actors.map((actor) => (
+                            <ActorItem actor={actor} key={actor.id}/>
+                        ))}
+                    </CarouselSection>
+                </section>
+            )}
+            {/* <CarouselSection title="Celebridades">
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
+                </CarouselSection> */}
         </Container>
     );
 }
