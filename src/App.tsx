@@ -1,12 +1,12 @@
 import CarouselSection from "@/components/atoms/CarouselSection";
+import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem, { MainMovieItem } from "@/components/molecules/MovieItem";
 import tmdb, { MainMovie } from "@/components/services/tmdb";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Movie, Person } from "tmdb-ts";
+import { Movie, Person, Recommendation } from "tmdb-ts";
 import Navbar from "./components/molecules/Navbar";
 import "./global.css";
-import ActorItem from "@/components/molecules/ActorItem";
 
 const Container = styled.div`
     display: flex;
@@ -14,11 +14,16 @@ const Container = styled.div`
     padding: 1.5rem;
     height: 100%;
 
+    section {
+        padding: 1.5rem 0;
+    }
+
     section.main {
         display: flex;
         height: calc(100vh - 6rem);
         gap: 1rem;
         padding-top: 1rem;
+        
 
         .column {
             flex-grow: 1;
@@ -58,6 +63,9 @@ function App() {
     const [popularMovies, setPopularMovies] = useState<Movie[] | null>(null);
     const [mainMovie, setMainMovie] = useState<MainMovie | null>(null);
     const [actors, setActors] = useState<Person[] | null>(null);
+    const [recommendations, setRecomenndations] = useState<
+        Recommendation[] | null
+    >(null);
 
     const fetchData = async () => {
         const newMoviesResponse = await tmdb.movies.nowPlaying({
@@ -81,6 +89,13 @@ function App() {
         );
 
         setMainMovie(mainMovieResponse);
+
+        const recommendations = await tmdb.movies.recommendations(mainMovieResponse.id, {
+            language: "pt-BR",
+            page: 1,
+        });
+
+        setRecomenndations(recommendations.results);
 
         const actors = await tmdb.people.popular({
             language: "pt-BR",
@@ -129,27 +144,31 @@ function App() {
                 </section>
             )}
 
-            {actors && (
-                <section className="actors">
-                    <CarouselSection title="Celebridades">
-                        {actors.map((actor) => (
-                            <ActorItem actor={actor} key={actor.id}/>
+            {recommendations && (
+                <section className="recommendations">
+                    <CarouselSection title="Recomendações">
+                        {recommendations.map((movie) => (
+                            <MovieItem
+                                movie={movie}
+                                key={movie.id}
+                                className="carousel-item"
+                            />
                         ))}
                     </CarouselSection>
                 </section>
             )}
-            {/* <CarouselSection title="Celebridades">
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                    <ActorItem url="https://i.nuuls.com/JDrA7.png" />
-                </CarouselSection> */}
+
+            {actors && (
+                <section className="actors">
+                    <CarouselSection title="Celebridades">
+                        {actors.map((actor) => (
+                            <ActorItem actor={actor} key={actor.id} />
+                        ))}
+                    </CarouselSection>
+                </section>
+            )}
+
+            <p className="copyright-notice">© 2024 Rader. All rights reserved</p>
         </Container>
     );
 }

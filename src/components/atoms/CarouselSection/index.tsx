@@ -8,7 +8,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1.5rem;
+    /* padding: 1.5rem; */
 
     .scroll-wrapper {
         display: flex;

@@ -9,7 +9,7 @@ import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import prettyMilliseconds from "pretty-ms";
 import { LuFlame, LuPlay, LuStar } from "react-icons/lu";
 import styled from "styled-components";
-import { Movie } from "tmdb-ts";
+import { Movie, Recommendation } from "tmdb-ts";
 
 const Container = styled.div`
     position: relative;
@@ -50,8 +50,8 @@ const Container = styled.div`
     }
 
     &.carousel-item {
-        min-width: 21rem;
-        height: 15.85419rem;
+        min-width: 24rem;
+        height: 16rem;
     }
 `;
 
@@ -61,17 +61,18 @@ export default function MovieItem({
     shouldUsePoster,
 }: {
     className?: string;
-    movie: Movie;
+    movie: Movie | Recommendation;
     shouldUsePoster?: boolean;
 }) {
+    
     return (
         <Container className={className}>
             <div className="image-wrapper">
                 <img
                     src={getTmdbPosterPathUrl(
                         shouldUsePoster
-                            ? movie.poster_path
-                            : movie.backdrop_path
+                            ? movie.poster_path!
+                            : movie.backdrop_path!
                     )}
                     alt=""
                 />
