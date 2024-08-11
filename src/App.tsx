@@ -23,7 +23,6 @@ const Container = styled.div`
         height: calc(100vh - 6rem);
         gap: 1rem;
         padding-top: 1rem;
-        
 
         .column {
             flex-grow: 1;
@@ -90,10 +89,13 @@ function App() {
 
         setMainMovie(mainMovieResponse);
 
-        const recommendations = await tmdb.movies.recommendations(mainMovieResponse.id, {
-            language: "pt-BR",
-            page: 1,
-        });
+        const recommendations = await tmdb.movies.recommendations(
+            mainMovieResponse.id,
+            {
+                language: "pt-BR",
+                page: 1,
+            }
+        );
 
         setRecomenndations(recommendations.results);
 
@@ -107,16 +109,16 @@ function App() {
 
     // console.log(mainMovie);
 
-    // useEffect(() => {
-    //     if (newMovies) return;
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        if (newMovies) return;
+        fetchData();
+    }, []);
 
     return (
         <Container>
             <Navbar />
 
-            {/* <section className="main">
+            <section className="main">
                 {mainMovie && <MainMovieItem movie={mainMovie} />}
 
                 <div className="column">
@@ -166,9 +168,11 @@ function App() {
                         ))}
                     </CarouselSection>
                 </section>
-            )} */}
+            )}
 
-            <p className="copyright-notice">© 2024 Rader. All rights reserved</p>
+            <p className="copyright-notice">
+                © 2024 Rader. All rights reserved
+            </p>
         </Container>
     );
 }

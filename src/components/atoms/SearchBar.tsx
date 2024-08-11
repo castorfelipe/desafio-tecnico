@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import styled from "styled-components";
 

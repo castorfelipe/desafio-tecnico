@@ -2,7 +2,11 @@ import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
 import tmdb from "@/components/services/tmdb";
 import useOnScreen from "@/hooks/useOnScreen";
 import animations from "@/utils/animations";
-import { calculateAge, getTmdbPosterPathUrl } from "@/utils/tmdb";
+import {
+    calculateAge,
+    getMultiSearchData,
+    getTmdbPosterPathUrl,
+} from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { LuStar, LuUser } from "react-icons/lu";
@@ -25,6 +29,8 @@ const Container = styled.div`
         border-radius: 0.75rem;
         border: 2px solid var(--colors-secondary-borders-6, #3a3a3a);
         background-color: #3a3a3a;
+        height: 5.4rem;
+        aspect-ratio: 1280/1920;
     }
 
     .cover-replacer {
@@ -90,18 +96,18 @@ const Container = styled.div`
     }
 
     p.title {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-
         color: #fff;
         font-size: 0.875rem;
         font-weight: 600;
 
         span {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
             color: #b4b4b4;
             text-overflow: ellipsis;
+
             font-size: 0.75rem;
             font-weight: 500;
             line-height: 0.75rem;
@@ -109,47 +115,6 @@ const Container = styled.div`
         }
     }
 `;
-
-const knownForNames: { [key: string]: string } = {
-    Acting: "Ator",
-    Directing: "Diretor",
-    Production: "Produtor",
-};
-
-const getItemData = (item: MultiSearchResult) => {
-    if (item.media_type === "movie") {
-        return {
-            title: item.title,
-            coverPath: item.poster_path,
-            rating: item.vote_average,
-            description: item.overview,
-        };
-    }
-
-    if (item.media_type === "tv") {
-        return {
-            title: item.name,
-            coverPath: item.poster_path,
-            rating: item.vote_average,
-            description: item.overview,
-        };
-    }
-
-    const role =
-        knownForNames[item.known_for_department] || item.known_for_department;
-
-    return {
-        title: item.name,
-        coverPath: item.profile_path,
-        rating: null,
-        description: `${role}: ${item.known_for
-            .map((d) => {
-                if (d.media_type === "movie") return d.title;
-                return d.name;
-            })
-            .join(", ")}`,
-    };
-};
 
 export default function SearchBarItem({
     searchItem,
@@ -159,16 +124,13 @@ export default function SearchBarItem({
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
 
-    const year =
-        "release_date" in searchItem && searchItem.release_date.split("-")[0];
-
     const [details, setDetails] = useState<PersonDetails>();
-    const { title, coverPath, rating, description } = getItemData(searchItem);
+    const { title, coverPath, rating, description, relased_year } =
+        getMultiSearchData(searchItem);
 
     const handleFetchDetails = async () => {
         if (searchItem.media_type !== "person") return;
         const detailsResponse = await tmdb.people.details(searchItem.id);
-        console.log(detailsResponse);
         setDetails(detailsResponse);
     };
 
@@ -215,7 +177,9 @@ export default function SearchBarItem({
                     )}
                 </div>
                 <div className="column description">
-                    {year && <div className="description-item">{year}</div>}
+                    {relased_year && (
+                        <div className="description-item">{relased_year}</div>
+                    )}
 
                     {description && (
                         <div className="description-item">{description}</div>
