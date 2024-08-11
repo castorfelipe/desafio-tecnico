@@ -1,7 +1,7 @@
 import { MultiSearchResult } from "tmdb-ts";
-
-export const getTmdbPosterPathUrl = (posterPath: string) =>
-    `https://image.tmdb.org/t/p/w1280/${posterPath}`;
+// w1280
+export const getTmdbPosterPathUrl = (posterPath: string, maxRes?: boolean) =>
+    `https://image.tmdb.org/t/p/${maxRes ? "original" : "w1280"}/${posterPath}`;
 
 export function calculateAge(birthday: string, deathday?: string): number {
     const birthDate = new Date(birthday);

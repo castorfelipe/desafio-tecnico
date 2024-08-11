@@ -5,8 +5,8 @@ import tmdb, { MainMovie } from "@/components/services/tmdb";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Movie, Person, Recommendation } from "tmdb-ts";
-import Navbar from "./components/molecules/Navbar";
-import "./global.css";
+import Navbar from "@/components/molecules/Navbar";
+import "@/global.css";
 
 const Container = styled.div`
     display: flex;
@@ -84,7 +84,7 @@ function App() {
         const mainMovieResponse = await tmdb.movies.details(
             popularMoviesResponse.results[0].id,
             [],
-            "pt-BR"
+            "pt-BR",
         );
 
         setMainMovie(mainMovieResponse);
@@ -94,7 +94,7 @@ function App() {
             {
                 language: "pt-BR",
                 page: 1,
-            }
+            },
         );
 
         setRecomenndations(recommendations.results);

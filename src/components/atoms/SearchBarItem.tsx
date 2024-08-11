@@ -96,6 +96,7 @@ const Container = styled.div`
     }
 
     p.title {
+        display: -webkit-box;
         color: #fff;
         font-size: 0.875rem;
         font-weight: 600;
@@ -170,7 +171,7 @@ export default function SearchBarItem({
                             )}
                         </AnimatePresence>
                     </p>
-                    {rating && (
+                    {rating !== undefined && rating > 0 && (
                         <MovieItemRating className="rating">
                             <LuStar /> {rating.toFixed(1)}
                         </MovieItemRating>

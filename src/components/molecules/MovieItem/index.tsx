@@ -97,7 +97,7 @@ export function MainMovieItem({ movie }: { movie: MainMovie }) {
     return (
         <Container className={"main-item"}>
             <div className="image-wrapper">
-                <img src={getTmdbPosterPathUrl(movie.backdrop_path)} alt="" />
+                <img src={getTmdbPosterPathUrl(movie.backdrop_path, true)} alt="" />
             </div>
             <MovieItemContent className="main-item">
                 <MovieItemHighlightTag className="no-margin">
