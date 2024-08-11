@@ -1,9 +1,7 @@
 export const getTmdbPosterPathUrl = (posterPath: string) =>
     `https://image.tmdb.org/t/p/w1280/${posterPath}`;
 
-
-
-export function calculateAge(birthday: string): number {
+export function calculateAge(birthday: string, deathday?: string): number {
     const birthDate = new Date(birthday);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -17,5 +15,10 @@ export function calculateAge(birthday: string): number {
         age--;
     }
 
+    // Caso o cara já tenha morrido, calcula a idade que ele tinha antes de ir de arrasta pra cima (idade do morto)
+    if (deathday) {
+        const diff = calculateAge(deathday);
+        return age - diff
+    }
     return age;
 }

@@ -107,16 +107,16 @@ function App() {
 
     // console.log(mainMovie);
 
-    useEffect(() => {
-        if (newMovies) return;
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     if (newMovies) return;
+    //     fetchData();
+    // }, []);
 
     return (
         <Container>
             <Navbar />
 
-            <section className="main">
+            {/* <section className="main">
                 {mainMovie && <MainMovieItem movie={mainMovie} />}
 
                 <div className="column">
@@ -166,7 +166,7 @@ function App() {
                         ))}
                     </CarouselSection>
                 </section>
-            )}
+            )} */}
 
             <p className="copyright-notice">© 2024 Rader. All rights reserved</p>
         </Container>

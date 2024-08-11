@@ -78,7 +78,6 @@ export default function ActorItem({ actor }: { actor: Person }) {
 
     const fetchActorDetails = async () => {
         const response = await tmdb.people.details(actor.id, [], "pt-BR");
-        console.log(response);
         setActorDetails(response);
     };
 

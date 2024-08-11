@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import styled from "styled-components";
 
@@ -8,7 +9,6 @@ const Container = styled.div`
     gap: 0.5rem;
     border-radius: 6.1875rem;
     flex-grow: 1;
-    max-width: 30rem;
 
     input {
         background: none;
@@ -42,13 +42,23 @@ const Container = styled.div`
     }
 `;
 
-export default function SearchBar() {
+export default function SearchBar({
+    onTextChange,
+    onSearchClicked,
+}: {
+    onTextChange: (d: string) => void;
+    onSearchClicked: () => void;
+}) {
     return (
         <Container>
-            <button>
+            <button onClick={onSearchClicked}>
                 <LuSearch />
             </button>
-            <input type="text" placeholder="Pesquisar..." />
+            <input
+                type="text"
+                placeholder="Pesquisar..."
+                onChange={(e) => onTextChange(e.target.value)}
+            />
         </Container>
     );
 }
