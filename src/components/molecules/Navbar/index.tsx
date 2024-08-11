@@ -1,9 +1,10 @@
 import IntegratedSearchBar from "@/components/molecules/IntegratedSearchBar";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import RaterLogo from "../../../assets/rater-logo.svg";
+import RaterLogo from "@/assets/rater-logo.svg?react";
 import tmdb from "@/services/tmdb";
 import { MultiSearchResult } from "tmdb-ts";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.nav`
     display: flex;
@@ -20,6 +21,10 @@ const Container = styled.nav`
         width: 100%;
         gap: 0.75rem;
     }
+
+    a {
+        cursor: pointer;
+    }
 `;
 
 export default function Navbar() {
@@ -28,6 +33,7 @@ export default function Navbar() {
         MultiSearchResult[] | null
     >(null);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const navigateTo = useNavigate()
 
     const handleSearch = async () => {
         const searchResponse = await tmdb.search.multi({
@@ -42,21 +48,23 @@ export default function Navbar() {
     console.log(searchResult);
 
     useEffect(() => {
-        clearTimeout(timeoutRef.current)
-        if(!searchTerm) return
+        clearTimeout(timeoutRef.current);
+        if (!searchTerm) return;
         timeoutRef.current = setTimeout(handleSearch, 1000);
         return () => clearTimeout(timeoutRef.current);
     }, [searchTerm]);
 
     return (
         <Container>
-            <img src={RaterLogo} />
+            <a onClick={() => navigateTo("/")}>
+                <RaterLogo />
+            </a>
             <IntegratedSearchBar
                 onTextChange={setSearchTerm}
                 onSearchClicked={handleSearch}
                 searchResult={searchResult}
             />
-            <img src={RaterLogo} className="invisible" />
+            <RaterLogo className="invisible" />
         </Container>
     );
 }

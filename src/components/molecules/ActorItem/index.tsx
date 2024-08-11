@@ -17,6 +17,7 @@ const Container = styled.div`
     aspect-ratio: 1/1;
     padding: 0.75rem;
     min-width: 17rem;
+    cursor: pointer;
 
     .image-wrapper {
         position: absolute;
@@ -31,6 +32,8 @@ const Container = styled.div`
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
+            transition: 0.1s;
         }
 
         z-index: 0;
@@ -62,20 +65,37 @@ const Container = styled.div`
         background: linear-gradient(
             180deg,
             rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0.5) 100%
+            rgba(0, 0, 0, 1) 100%
         );
         width: 100%;
         height: 100%;
         z-index: 1;
+        opacity: 0.5;
+        transition: all 0.25s;
+    }
+
+    &:hover {
+        &::before {
+            opacity: 0.25;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 1) 100%
+            );
+        }
+
+        .image-wrapper img {
+            transform: scale(1.01);
+        }
     }
 `;
 
 export default function ActorItem({ actor }: { actor: Person }) {
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
-    const navigateTo = useNavigate()
+    const navigateTo = useNavigate();
     const [actorDetails, setActorDetails] = useState<PersonDetails | null>(
-        null
+        null,
     );
 
     const fetchActorDetails = async () => {
@@ -98,7 +118,7 @@ export default function ActorItem({ actor }: { actor: Person }) {
             <h2 className="name">{actor.name}</h2>
             <AnimatePresence>
                 {actorDetails && (
-                    <motion.span className="age" {...animations.fadeInOut(.5)}>
+                    <motion.span className="age" {...animations.fadeInOut(0.5)}>
                         {calculateAge(actorDetails.birthday)}
                     </motion.span>
                 )}
