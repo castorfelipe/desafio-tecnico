@@ -38,7 +38,7 @@ export const getMultiSearchData = (item: MultiSearchResult) => {
             coverPath: item.poster_path,
             rating: item.vote_average,
             description: item.overview,
-            relased_year: item.release_date.split("-")[0]
+            relased_year: item.release_date.split("-")[0],
         };
     }
 
@@ -48,7 +48,7 @@ export const getMultiSearchData = (item: MultiSearchResult) => {
             coverPath: item.poster_path,
             rating: item.vote_average,
             description: item.overview,
-            relased_year: item.first_air_date.split("-")[0]
+            relased_year: item.first_air_date.split("-")[0],
         };
     }
 
@@ -65,4 +65,39 @@ export const getMultiSearchData = (item: MultiSearchResult) => {
             })
             .join(", ")}`,
     };
+};
+
+const convertBirthdayToDate = (birthday: string) => {
+    const [year, month, day] = birthday.split("-").map(Number);
+    const dateObject = new Date(year, month - 1, day);
+    return dateObject
+};
+
+export const convertBirthdayToTitle = (birthday: string) => {
+    const date = convertBirthdayToDate(birthday)
+
+    const months = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+    ];
+
+    // Extract day, month, and year
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    // Format the date
+    const formattedDate = `${day} de ${month} de ${year}`;
+
+    return formattedDate
 };

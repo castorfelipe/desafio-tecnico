@@ -4,7 +4,7 @@ import {
     MovieItemHighlightTag,
     MovieItemRating,
 } from "@/components/molecules/MovieItem/styles";
-import { MainMovie } from "@/components/services/tmdb";
+import { MainMovie } from "@/services/tmdb";
 import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import prettyMilliseconds from "pretty-ms";
 import { LuFlame, LuPlay, LuStar } from "react-icons/lu";

@@ -1,5 +1,5 @@
 import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
-import tmdb from "@/components/services/tmdb";
+import tmdb from "@/services/tmdb";
 import useOnScreen from "@/hooks/useOnScreen";
 import animations from "@/utils/animations";
 import {
@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { LuStar, LuUser } from "react-icons/lu";
 import styled from "styled-components";
 import { MultiSearchResult, PersonDetails } from "tmdb-ts";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
@@ -124,6 +125,7 @@ export default function SearchBarItem({
 }) {
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
+    const navigateTo = useNavigate();
 
     const [details, setDetails] = useState<PersonDetails>();
     const { title, coverPath, rating, description, relased_year } =
@@ -135,6 +137,11 @@ export default function SearchBarItem({
         setDetails(detailsResponse);
     };
 
+    const handleRedirect = () => {
+        if (searchItem.media_type === "person")
+            return navigateTo({ pathname: `/actor/${searchItem.id}` });
+    };
+
     useEffect(() => {
         if (!isOnScreen) return;
         if (details) return;
@@ -142,7 +149,7 @@ export default function SearchBarItem({
     }, [isOnScreen]);
 
     return (
-        <Container ref={ref}>
+        <Container ref={ref} onClick={handleRedirect}>
             {coverPath && (
                 <img src={getTmdbPosterPathUrl(coverPath)} alt="cover" />
             )}
@@ -165,7 +172,7 @@ export default function SearchBarItem({
                                 >
                                     {calculateAge(
                                         details.birthday,
-                                        details.deathday
+                                        details.deathday,
                                     )}
                                 </motion.span>
                             )}

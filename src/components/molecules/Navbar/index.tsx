@@ -2,7 +2,7 @@ import IntegratedSearchBar from "@/components/molecules/IntegratedSearchBar";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import RaterLogo from "../../../assets/rater-logo.svg";
-import tmdb from "@/components/services/tmdb";
+import tmdb from "@/services/tmdb";
 import { MultiSearchResult } from "tmdb-ts";
 
 const Container = styled.nav`

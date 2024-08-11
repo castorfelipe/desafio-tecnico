@@ -1,4 +1,4 @@
-import tmdb from "@/components/services/tmdb";
+import tmdb from "@/services/tmdb";
 import useOnScreen from "@/hooks/useOnScreen";
 import animations from "@/utils/animations";
 import { calculateAge, getTmdbPosterPathUrl } from "@/utils/tmdb";
@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Person, PersonDetails } from "tmdb-ts";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     position: relative;
@@ -72,6 +73,7 @@ const Container = styled.div`
 export default function ActorItem({ actor }: { actor: Person }) {
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
+    const navigateTo = useNavigate()
     const [actorDetails, setActorDetails] = useState<PersonDetails | null>(
         null
     );
@@ -89,7 +91,7 @@ export default function ActorItem({ actor }: { actor: Person }) {
     }, [isOnScreen]);
 
     return (
-        <Container ref={ref}>
+        <Container ref={ref} onClick={() => navigateTo(`/actor/${actor.id}`)}>
             <div className="image-wrapper">
                 <img src={getTmdbPosterPathUrl(actor.profile_path)} alt="" />
             </div>

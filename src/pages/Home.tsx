@@ -1,7 +1,7 @@
 import CarouselSection from "@/components/atoms/CarouselSection";
 import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem, { MainMovieItem } from "@/components/molecules/MovieItem";
-import tmdb, { MainMovie } from "@/components/services/tmdb";
+import tmdb, { MainMovie } from "@/services/tmdb";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Movie, Person, Recommendation } from "tmdb-ts";
