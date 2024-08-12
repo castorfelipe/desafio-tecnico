@@ -37,7 +37,7 @@ export const LoadingSmall = ({
         >
             <ReactLoading
                 type={"spin"}
-                color={"#eee"}
+                color={"#eeeeee90"}
                 height={`${size}rem`}
                 width={`${size}rem`}
             />
