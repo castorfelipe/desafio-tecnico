@@ -1,20 +1,22 @@
+import { LoadingSmall } from "@/components/atoms/Loading";
 import MarkedTitle from "@/components/atoms/MarkedTitle";
 import Navigator from "@/components/atoms/Navigator";
 import Navbar from "@/components/molecules/Navbar";
 import MoviesGrid from "@/components/organisms/MoviesGrid";
 import tmdb from "@/services/tmdb";
+import animations from "@/utils/animations";
 import {
     calculateAge,
     convertBirthdayToTitle,
     getTmdbPosterPathUrl,
 } from "@/utils/tmdb";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AppendToResponse, PersonDetails } from "tmdb-ts";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
     color: #eee;
     padding: 1.5rem;
     height: 100%;
@@ -113,7 +115,9 @@ export default function Actor() {
         >();
 
     const [pageIndex, setPageIndex] = useState(1);
+    const [isLoading, setLoading] = useState(true)
     const fetchActor = async () => {
+        setLoading(true)
         const actorResponse = await tmdb.people.details(
             Number(actorId!),
             ["combined_credits"],
@@ -121,6 +125,7 @@ export default function Actor() {
         );
 
         setActor(actorResponse);
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -148,8 +153,11 @@ export default function Actor() {
     if (!actor || !slicedCast) return;
 
     return (
-        <Container>
+        <Container {...animations.fadeInOut(.3)} className="page">
             <Navbar />
+            <AnimatePresence>
+                {isLoading && <LoadingSmall size={3} solid={true}/>}
+            </AnimatePresence>
             <main>
                 <section className="page">
                     <MarkedTitle>Filmes e séries</MarkedTitle>

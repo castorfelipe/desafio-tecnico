@@ -33,9 +33,11 @@ export default function Navbar() {
         MultiSearchResult[] | null
     >(null);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
-    const navigateTo = useNavigate()
+    const navigateTo = useNavigate();
+    const [isLoading, setLoading] = useState(false);
 
     const handleSearch = async () => {
+        setLoading(true);
         const searchResponse = await tmdb.search.multi({
             language: "pt-BR",
             include_adult: true,
@@ -43,13 +45,18 @@ export default function Navbar() {
         });
 
         setSearchResult(searchResponse.results);
+        setLoading(false);
     };
 
     useEffect(() => {
         clearTimeout(timeoutRef.current);
         if (!searchTerm) return;
+        setLoading(true);
         timeoutRef.current = setTimeout(handleSearch, 1000);
-        return () => clearTimeout(timeoutRef.current);
+        return () => {
+            clearTimeout(timeoutRef.current);
+            setLoading(false);
+        };
     }, [searchTerm]);
 
     return (
@@ -61,6 +68,7 @@ export default function Navbar() {
                 onTextChange={setSearchTerm}
                 onSearchClicked={handleSearch}
                 searchResult={searchResult}
+                isLoading={isLoading}
             />
             <RaterLogo className="invisible" />
         </Container>

@@ -1,11 +1,13 @@
 import { ButtonWithIcon } from "@/components/atoms/ButtonWithIcon";
 import CarouselSection from "@/components/atoms/CarouselSection";
+import { LoadingSmall } from "@/components/atoms/Loading";
 import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem from "@/components/molecules/MovieItem";
-import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
 import Navbar from "@/components/molecules/Navbar";
 import tmdb from "@/services/tmdb";
+import animations from "@/utils/animations";
 import { getTmdbPosterPathUrl } from "@/utils/tmdb";
+import { AnimatePresence, motion } from "framer-motion";
 import prettyMilliseconds from "pretty-ms";
 import { useEffect, useMemo, useState } from "react";
 import { LuCircle, LuPlay, LuStar } from "react-icons/lu";
@@ -13,13 +15,13 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AppendToResponse, MovieDetails } from "tmdb-ts";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
     height: 100%;
     padding: 1.5rem;
 
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     .banner-wrapper {
         position: relative;
         width: 100%;
@@ -204,8 +206,10 @@ export default function Movie() {
     const { movieId } = useParams();
     const [movie, setMovie] = useState<MovieType | null>(null);
     const [crew, setCrew] = useState<{ [key: string]: string[] }>({});
+    const [isLoading, setLoading] = useState(true);
 
     const fetchMovie = async () => {
+        setLoading(true);
         const response = await tmdb.movies.details(
             Number(movieId!),
             ["similar", "release_dates", "images", "credits"],
@@ -229,6 +233,7 @@ export default function Movie() {
 
         setCrew(credits);
         setMovie(response);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -253,8 +258,11 @@ export default function Movie() {
     }, [movie]);
 
     return (
-        <Container>
+        <Container {...animations.fadeInOut(0.3)} className="page">
             <Navbar />
+            <AnimatePresence>
+                {isLoading && <LoadingSmall size={3} solid={true} />}
+            </AnimatePresence>
             {movie && (
                 <div className="top-area">
                     <div className="banner-wrapper">

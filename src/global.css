@@ -6,16 +6,30 @@
 }
 
 html, body {
+    background-color: #121212;
     height: 100vh;
     width: 100vw;
-    background-color: #121212;
+    overflow: hidden;
+}
+
+html {
+    /* background-color: green; */
+}
+
+html {
+    /* background-color: blue; */
 }
 
 #root {
-    height: 100%;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+
+    /* background-color: yellow; */
 }
 
 :root {
+    position: relative;
     font-size: 16px;
 }
 
@@ -28,4 +42,12 @@ button {
 img {
     user-select: none;
     -webkit-user-drag: none;
+}
+
+#root > .page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    overflow: auto;
 }

@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { MultiSearchResult, PersonDetails } from "tmdb-ts";
 import { useNavigate } from "react-router-dom";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
     display: flex;
     height: fit-content;
     min-height: 5.875rem;
@@ -23,7 +23,7 @@ const Container = styled.div`
     cursor: pointer;
     gap: 0.5rem;
     color: #eee;
-    transition: 0.1s ease-in;
+    transition: background-color 0.1s ease-in;
 
     img,
     .cover-replacer {
@@ -120,8 +120,10 @@ const Container = styled.div`
 
 export default function SearchBarItem({
     searchItem,
+    index,
 }: {
     searchItem: MultiSearchResult;
+    index: number;
 }) {
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
@@ -150,9 +152,19 @@ export default function SearchBarItem({
     }, [isOnScreen]);
 
     return (
-        <Container ref={ref} onClick={handleRedirect}>
+        <Container
+            ref={ref}
+            onClick={handleRedirect}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+        >
             {coverPath && (
-                <img src={getTmdbPosterPathUrl(coverPath, "w500")} alt="cover" />
+                <img
+                    src={getTmdbPosterPathUrl(coverPath, "w500")}
+                    alt="cover"
+                />
             )}
 
             {!coverPath && (

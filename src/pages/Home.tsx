@@ -1,14 +1,17 @@
 import CarouselSection from "@/components/atoms/CarouselSection";
+import { LoadingSmall } from "@/components/atoms/Loading";
 import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem, { MainMovieItem } from "@/components/molecules/MovieItem";
+import Navbar from "@/components/molecules/Navbar";
+import "@/global.css";
 import tmdb, { MainMovie } from "@/services/tmdb";
+import animations from "@/utils/animations";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Movie, Person, Recommendation } from "tmdb-ts";
-import Navbar from "@/components/molecules/Navbar";
-import "@/global.css";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
@@ -65,8 +68,10 @@ function App() {
     const [recommendations, setRecomenndations] = useState<
         Recommendation[] | null
     >(null);
+    const [isLoading, setLoading] = useState(true);
 
     const fetchData = async () => {
+        setLoading(true);
         const newMoviesResponse = await tmdb.movies.nowPlaying({
             language: "pt-BR",
             page: 1,
@@ -105,6 +110,7 @@ function App() {
         });
 
         setActors(actors.results);
+        setLoading(false);
     };
 
     // console.log(mainMovie);
@@ -115,22 +121,24 @@ function App() {
     }, []);
 
     return (
-        <Container>
+        <Container {...animations.fadeInOut(0.3)} className="page">
+            <AnimatePresence>
+                {isLoading && <LoadingSmall size={3} solid={true}/>}
+            </AnimatePresence>
             <Navbar />
 
-            <section className="main">
-                {mainMovie && <MainMovieItem movie={mainMovie} />}
+            {Boolean(mainMovie && popularMovies) && (
+                <section className="main">
+                    <MainMovieItem movie={mainMovie!} />
 
-                <div className="column">
-                    <h2 className="column-title">Destaques também</h2>
-                    {popularMovies &&
-                        popularMovies
-                            .slice(1, 4)
-                            .map((movie) => (
-                                <MovieItem movie={movie} key={movie.id} />
-                            ))}
-                </div>
-            </section>
+                    <div className="column">
+                        <h2 className="column-title">Destaques também</h2>
+                        {popularMovies!.slice(1, 4).map((movie) => (
+                            <MovieItem movie={movie} key={movie.id} />
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {newMovies && (
                 <section className="new-movies">

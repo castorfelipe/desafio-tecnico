@@ -25,10 +25,12 @@ export default function IntegratedSearchBar({
     onTextChange,
     onSearchClicked,
     searchResult,
+    isLoading
 }: {
     onTextChange: (d: string) => void;
     onSearchClicked: () => void;
     searchResult: MultiSearchResult[] | null;
+    isLoading: boolean
 }) {
     const [ref, bounds] = useMeasure();
     return (
@@ -38,6 +40,7 @@ export default function IntegratedSearchBar({
                     <SearchBarPopupContent
                         searchResult={searchResult}
                         width={bounds.width}
+                        isLoading={isLoading}
                     />
                 }
             >
