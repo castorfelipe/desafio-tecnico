@@ -5,7 +5,7 @@ import { calculateAge, getTmdbPosterPathUrl } from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Person, PersonDetails } from "tmdb-ts";
+import { Cast, Person, PersonDetails } from "tmdb-ts";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
@@ -33,7 +33,7 @@ const Container = styled.div`
             height: 100%;
             object-fit: cover;
             object-position: center;
-            transition: 0.1s;
+            transition: 0.4s;
         }
 
         z-index: 0;
@@ -90,7 +90,7 @@ const Container = styled.div`
     }
 `;
 
-export default function ActorItem({ actor }: { actor: Person }) {
+export default function ActorItem({ actor }: { actor: Person | Cast }) {
     const ref = useRef(null);
     const isOnScreen = useOnScreen(ref);
     const navigateTo = useNavigate();

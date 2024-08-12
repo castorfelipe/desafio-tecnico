@@ -1,5 +1,4 @@
 import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
-import animations from "@/utils/animations";
 import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import { motion } from "framer-motion";
 import { LuStar } from "react-icons/lu";
@@ -123,7 +122,7 @@ export default function MoviesGrid({
                         key={index}
                         onClick={() => navigateTo(`/movie/${item.id}`)}
                     >
-                        <img src={getTmdbPosterPathUrl(coverPath)} />
+                        <img src={getTmdbPosterPathUrl(coverPath, "w500")} />
                         <div className="column">
                             <div className="column small">
                                 <p className="title">{title}</p>

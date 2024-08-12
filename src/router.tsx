@@ -1,5 +1,6 @@
 import Actor from "@/pages/Actor";
 import Home from "@/pages/Home";
+import Movie from "@/pages/Movie";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
     {
         path: "/actor/:actorId",
         element: <Actor />,
+    },
+    {
+        path: "/movie/:movieId",
+        element: <Movie />,
     },
 ]);
 

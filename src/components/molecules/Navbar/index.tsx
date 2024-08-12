@@ -45,8 +45,6 @@ export default function Navbar() {
         setSearchResult(searchResponse.results);
     };
 
-    console.log(searchResult);
-
     useEffect(() => {
         clearTimeout(timeoutRef.current);
         if (!searchTerm) return;

@@ -136,7 +136,7 @@ export default function Actor() {
             (a, b) => b.vote_count - a.vote_count,
         );
 
-        return sorted
+        return sorted;
     }, [actor]);
     const slicedCast = useMemo(() => {
         if (!actor) return [];
@@ -169,28 +169,42 @@ export default function Actor() {
                     />
                 </section>
                 <section className="actor-details">
-                    <img src={getTmdbPosterPathUrl(actor.profile_path, true)} />
+                    <img src={getTmdbPosterPathUrl(actor.profile_path)} />
                     <h2 className="name">{actor.name}</h2>
 
-                    <div className="column">
-                        <p className="property">Nascido(a) em:</p>
-                        <p className="value">
-                            {convertBirthdayToTitle(actor.birthday)} (
-                            {calculateAge(actor.birthday)} anos)
-                        </p>
-                    </div>
+                    {actor.birthday && (
+                        <div className="column">
+                            <p className="property">Nascido(a) em:</p>
+                            <p className="value">
+                                {convertBirthdayToTitle(actor.birthday)} (
+                                {calculateAge(actor.birthday)} anos)
+                            </p>
+                        </div>
+                    )}
 
-                    <div className="column">
-                        <p className="property">Origem:</p>
-                        <p className="value">{actor.place_of_birth}</p>
-                    </div>
+                    {actor.place_of_birth && (
+                        <div className="column">
+                            <p className="property">Origem:</p>
+                            <p className="value">{actor.place_of_birth}</p>
+                        </div>
+                    )}
 
-                    <div className="column description-column">
-                        <p className="property">Sobre:</p>
-                        <p className="value">{actor.biography}</p>
-                    </div>
+                    {actor.biography && (
+                        <div className="column description-column">
+                            <p className="property">Sobre:</p>
+                            <p className="value">{actor.biography}</p>
+                        </div>
+                    )}
                 </section>
             </main>
+            {/* Para cache */}
+            {actor.combined_credits.cast.map((item, index) => (
+                <img
+                    src={getTmdbPosterPathUrl(item.poster_path, "w500")}
+                    style={{ display: "none" }}
+                    key={index}
+                />
+            ))}
         </Container>
     );
 }

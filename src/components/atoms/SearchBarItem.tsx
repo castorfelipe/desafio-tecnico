@@ -140,6 +140,7 @@ export default function SearchBarItem({
     const handleRedirect = () => {
         if (searchItem.media_type === "person")
             return navigateTo({ pathname: `/actor/${searchItem.id}` });
+        return navigateTo({ pathname: `/movie/${searchItem.id}` });
     };
 
     useEffect(() => {
@@ -151,7 +152,7 @@ export default function SearchBarItem({
     return (
         <Container ref={ref} onClick={handleRedirect}>
             {coverPath && (
-                <img src={getTmdbPosterPathUrl(coverPath)} alt="cover" />
+                <img src={getTmdbPosterPathUrl(coverPath, "w500")} alt="cover" />
             )}
 
             {!coverPath && (

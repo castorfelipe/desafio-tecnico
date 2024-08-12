@@ -1,7 +1,7 @@
 import { MultiSearchResult } from "tmdb-ts";
 // w1280
-export const getTmdbPosterPathUrl = (posterPath: string, maxRes?: boolean) =>
-    `https://image.tmdb.org/t/p/${maxRes ? "original" : "w1280"}/${posterPath}`;
+export const getTmdbPosterPathUrl = (posterPath: string, res?: "w300" | "w500" | "w780" | "w1280") =>
+    `https://image.tmdb.org/t/p/${res ? res : "original"}/${posterPath}`;
 
 export function calculateAge(birthday: string, deathday?: string): number {
     const birthDate = new Date(birthday);
