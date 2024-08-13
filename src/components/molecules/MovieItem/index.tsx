@@ -7,6 +7,7 @@ import {
 import { MainMovie } from "@/services/tmdb";
 import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import prettyMilliseconds from "pretty-ms";
+import { useRef } from "react";
 import { LuFlame, LuPlay, LuStar } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -70,6 +71,7 @@ const Container = styled.div`
     &.carousel-item {
         min-width: 24rem;
         height: 16rem;
+        max-width: 24rem;
     }
 
     &:hover {
@@ -78,6 +80,7 @@ const Container = styled.div`
         }
         .image-wrapper img {
             transform: scale(1.01);
+            filter: saturate(1.05);
         }
     }
 `;
@@ -92,11 +95,16 @@ export default function MovieItem({
     shouldUsePoster?: boolean;
 }) {
     const navigateTo = useNavigate();
+    const clickPointRef = useRef<number | null>(null);
 
     return (
         <Container
             className={className}
-            onClick={() => navigateTo(`/movie/${movie.id}`)}
+            onClick={(e) => {
+                if (e.screenX !== clickPointRef.current) return;
+                navigateTo(`/movie/${movie.id}`);
+            }}
+            onPointerDown={(e) => (clickPointRef.current = e.screenX)}
         >
             <div className="image-wrapper">
                 <img

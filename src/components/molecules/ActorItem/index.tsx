@@ -14,6 +14,7 @@ const Container = styled.div`
     align-items: flex-end;
 
     height: 100%;
+    min-height: 16rem;
     aspect-ratio: 1/1;
     padding: 0.75rem;
     min-width: 17rem;
@@ -97,6 +98,7 @@ export default function ActorItem({ actor }: { actor: Person | Cast }) {
     const [actorDetails, setActorDetails] = useState<PersonDetails | null>(
         null,
     );
+    const clickPointRef = useRef<number | null>(null);
 
     const fetchActorDetails = async () => {
         const response = await tmdb.people.details(actor.id, [], "pt-BR");
@@ -111,7 +113,14 @@ export default function ActorItem({ actor }: { actor: Person | Cast }) {
     }, [isOnScreen]);
 
     return (
-        <Container ref={ref} onClick={() => navigateTo(`/actor/${actor.id}`)}>
+        <Container
+            ref={ref}
+            onClick={(e) => {
+                if (e.screenX !== clickPointRef.current) return;
+                navigateTo(`/actor/${actor.id}`);
+            }}
+            onPointerDown={(e) => (clickPointRef.current = e.screenX)}
+        >
             <div className="image-wrapper">
                 <img src={getTmdbPosterPathUrl(actor.profile_path)} alt="" />
             </div>
