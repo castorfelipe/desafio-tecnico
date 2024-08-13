@@ -61,6 +61,10 @@ const Container = styled.div`
         .flicity-slider {
             overflow: hidden;
         }
+
+        .flickity-viewport {
+            /* height: 20rem; */
+        }
     }
 `;
 
@@ -96,6 +100,8 @@ export default function CarouselSection({
                     // contain: true,
                     wrapAround: false,
                     friction: .28,
+                    adaptiveHeight: true,
+                    setGallerySize: true
                     // autoPlay: true,
                 }}
                 reloadOnUpdate={true}
