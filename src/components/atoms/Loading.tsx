@@ -15,13 +15,6 @@ const Container = styled(motion.div)`
     z-index: 2;
 `;
 
-const Icon = styled(motion.div)`
-    border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
-    background-color: #eeeeee57;
-`;
-
 export const LoadingSmall = ({
     size,
     solid,

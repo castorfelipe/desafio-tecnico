@@ -1,7 +1,7 @@
 import { RoundButton } from "@/components/atoms/RoundButton";
 import SearchBar from "@/components/atoms/SearchBar";
 import SearchBarPopup from "@/components/atoms/SearchBarPopup";
-import SearchBarPopupContent from "@/components/atoms/SearchBarPopupContent";
+import SearchBarPopupContent from "@/components/organisms/SearchBarPopupContent";
 import { LuSlidersHorizontal } from "react-icons/lu";
 import useMeasure from "react-use-measure";
 import styled from "styled-components";
@@ -25,12 +25,12 @@ export default function IntegratedSearchBar({
     onTextChange,
     onSearchClicked,
     searchResult,
-    isLoading
+    isLoading,
 }: {
     onTextChange: (d: string) => void;
     onSearchClicked: () => void;
     searchResult: MultiSearchResult[] | null;
-    isLoading: boolean
+    isLoading: boolean;
 }) {
     const [ref, bounds] = useMeasure();
     return (

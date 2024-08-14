@@ -1,5 +1,5 @@
 import MarkedTitle from "@/components/atoms/MarkedTitle";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Flickity from "react-flickity-component";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import styled from "styled-components";
@@ -77,36 +77,44 @@ export default function CarouselSection({
 }) {
     const flickityRef = useRef<Flickity | null>(null);
 
+    const handleLeftClick = () => {
+        (flickityRef.current as any).prevButton.element.click();
+    };
+
+    const handleRightClick = () => {
+        (flickityRef.current as any).nextButton.element.click();
+    };
+
     return (
         <Container>
             <div className="row">
                 <MarkedTitle className="carousel-title">{title}</MarkedTitle>
                 <div className="buttons-wrapper">
-                    <button disabled>
+                    <button onClick={handleLeftClick}>
                         <LuChevronLeft />
                     </button>
-                    <button>
+                    <button onClick={handleRightClick}>
                         <LuChevronRight />
                     </button>
                 </div>
             </div>
             <Flickity
-                ref={flickityRef}
+                flickityRef={(r) => (flickityRef.current = r)}
                 className="carousel"
                 options={{
                     cellAlign: "left",
-                    initialIndex: 1,
+                    initialIndex: 0,
                     freeScroll: true,
-                    // contain: true,
                     wrapAround: false,
-                    friction: .28,
+                    friction: 0.28,
                     adaptiveHeight: true,
-                    setGallerySize: true
-                    // autoPlay: true,
+                    setGallerySize: true,
                 }}
                 reloadOnUpdate={true}
             >
-                {children.map((child) => child)}
+                {children.map((child, index) => (
+                    <div key={index}>{child}</div>
+                ))}
             </Flickity>
         </Container>
     );
