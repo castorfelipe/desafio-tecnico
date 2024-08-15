@@ -1,5 +1,5 @@
+import { Cover } from "@/components/atoms/Cover";
 import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
-import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import { motion } from "framer-motion";
 import { LuStar } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { PersonMovieCast, PersonTvShowCast } from "tmdb-ts";
 
 const Container = styled(motion.div)`
-    position: absolute;
     inset: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -20,7 +19,6 @@ const Container = styled(motion.div)`
         display: flex;
         gap: 0.5rem;
         padding: 0.25rem;
-        /* background-color: red; */
         height: fit-content;
         border-radius: 1rem;
         transition: 0.1s;
@@ -31,6 +29,7 @@ const Container = styled(motion.div)`
             border-radius: 0.75rem;
             border: 2px solid var(--colors-secondary-borders-6, #3a3a3a);
             aspect-ratio: 1280/1920;
+            flex-shrink: 0;
         }
 
         .column {
@@ -86,6 +85,11 @@ const Container = styled(motion.div)`
             background-color: #3a3a3a;
         }
     }
+
+    @media (max-width: 800px) {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+    }
 `;
 
 const getData = (item: PersonMovieCast & PersonTvShowCast) => {
@@ -106,12 +110,7 @@ export default function MoviesGrid({
 }) {
     const navigateTo = useNavigate();
     return (
-        <Container
-            initial={{ opacity: 0, top: -0, pointerEvents: "none" }}
-            animate={{ opacity: 1, top: 0, pointerEvents: "all" }}
-            exit={{ opacity: 0, top: 0, pointerEvents: "none" }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
+        <Container>
             {cast.map((item, index) => {
                 const { title, coverPath, rating, relased_year } =
                     getData(item);
@@ -122,7 +121,7 @@ export default function MoviesGrid({
                         key={index}
                         onClick={() => navigateTo(`/movie/${item.id}`)}
                     >
-                        <img src={getTmdbPosterPathUrl(coverPath, "w500")} />
+                        <Cover posterPath={coverPath} $posterType="movie" />
                         <div className="column">
                             <div className="column small">
                                 <p className="title">{title}</p>

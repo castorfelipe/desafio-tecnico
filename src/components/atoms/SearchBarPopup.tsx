@@ -14,11 +14,12 @@ export default function SearchBarPopup({
     return (
         <Tippy
             content={content}
-            interactive={true}
             hideOnClick={false}
             trigger="click"
+            onClickOutside={(instance) => instance.hide()}
             placement="bottom-start"
             animation="shift-away"
+            interactive={true}
             {...extraProps}
         >
             {children}

@@ -1,6 +1,5 @@
 import { LoadingSmall } from "@/components/atoms/Loading";
 import SearchBarItem from "@/components/atoms/SearchBarItem";
-import animations from "@/utils/animations";
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import { MultiSearchResult } from "tmdb-ts";

@@ -1,3 +1,4 @@
+import { Cover } from "@/components/atoms/Cover";
 import { LoadingSmall } from "@/components/atoms/Loading";
 import MarkedTitle from "@/components/atoms/MarkedTitle";
 import Navigator from "@/components/atoms/Navigator";
@@ -5,11 +6,7 @@ import Navbar from "@/components/molecules/Navbar";
 import MoviesGrid from "@/components/organisms/MoviesGrid";
 import tmdb from "@/services/tmdb";
 import animations from "@/utils/animations";
-import {
-    calculateAge,
-    convertBirthdayToTitle,
-    getTmdbPosterPathUrl,
-} from "@/utils/tmdb";
+import { calculateAge, convertBirthdayToTitle } from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -44,15 +41,16 @@ const Container = styled(motion.div)`
     }
 
     .grid-wrapper {
-        position: relative;
         flex-grow: 1;
+        min-height: fit-content;
     }
 
     section.actor-details {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        width: 25rem;
+        max-width: 25rem;
+        width: 100%;
         flex-shrink: 0;
         overflow: auto;
 
@@ -105,6 +103,21 @@ const Container = styled(motion.div)`
             }
         }
     }
+
+    section {
+        width: 100%;
+    }
+
+    @media (max-width: 800px) {
+        main {
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+
+        section.actor-details {
+            max-width: 40rem;
+        }
+    }
 `;
 
 export default function Actor() {
@@ -115,9 +128,9 @@ export default function Actor() {
         >();
 
     const [pageIndex, setPageIndex] = useState(1);
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true);
     const fetchActor = async () => {
-        setLoading(true)
+        setLoading(true);
         const actorResponse = await tmdb.people.details(
             Number(actorId!),
             ["combined_credits"],
@@ -125,7 +138,7 @@ export default function Actor() {
         );
 
         setActor(actorResponse);
-        setLoading(false)
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -153,18 +166,16 @@ export default function Actor() {
     if (!actor || !slicedCast) return;
 
     return (
-        <Container {...animations.fadeInOut(.3)} className="page">
+        <Container {...animations.fadeInOut(0.3)} className="page">
             <Navbar />
             <AnimatePresence>
-                {isLoading && <LoadingSmall size={3} solid={true}/>}
+                {isLoading && <LoadingSmall size={3} solid={true} />}
             </AnimatePresence>
             <main>
                 <section className="page">
                     <MarkedTitle>Filmes e séries</MarkedTitle>
                     <div className="grid-wrapper">
-                        <AnimatePresence mode="sync">
-                            <MoviesGrid cast={slicedCast} key={pageIndex} />
-                        </AnimatePresence>
+                        <MoviesGrid cast={slicedCast} key={pageIndex} />
                     </div>
                     <div className="divider" />
                     <Navigator
@@ -177,7 +188,10 @@ export default function Actor() {
                     />
                 </section>
                 <section className="actor-details">
-                    <img src={getTmdbPosterPathUrl(actor.profile_path)} />
+                    <Cover
+                        posterPath={actor.profile_path}
+                        $posterType="person"
+                    />
                     <h2 className="name">{actor.name}</h2>
 
                     {actor.birthday && (
@@ -205,12 +219,12 @@ export default function Actor() {
                     )}
                 </section>
             </main>
-            {/* Para cache */}
             {actor.combined_credits.cast.map((item, index) => (
-                <img
-                    src={getTmdbPosterPathUrl(item.poster_path, "w500")}
+                <Cover
+                    posterPath={item.poster_path}
                     style={{ display: "none" }}
                     key={index}
+                    $posterType="person"
                 />
             ))}
         </Container>

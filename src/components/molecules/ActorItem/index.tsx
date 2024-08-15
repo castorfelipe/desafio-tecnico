@@ -1,12 +1,13 @@
-import tmdb from "@/services/tmdb";
+import { Cover } from "@/components/atoms/Cover";
 import useOnScreen from "@/hooks/useOnScreen";
+import tmdb from "@/services/tmdb";
 import animations from "@/utils/animations";
-import { calculateAge, getTmdbPosterPathUrl } from "@/utils/tmdb";
+import { calculateAge } from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Cast, Person, PersonDetails } from "tmdb-ts";
-import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     position: relative;
@@ -122,7 +123,10 @@ export default function ActorItem({ actor }: { actor: Person | Cast }) {
             onPointerDown={(e) => (clickPointRef.current = e.screenX)}
         >
             <div className="image-wrapper">
-                <img src={getTmdbPosterPathUrl(actor.profile_path)} alt="" />
+                <Cover
+                    posterPath={actor.profile_path}
+                    $posterType="person"
+                />
             </div>
             <h2 className="name">{actor.name}</h2>
             <AnimatePresence>

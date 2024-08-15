@@ -12,20 +12,10 @@ html, body {
     overflow: hidden;
 }
 
-html {
-    /* background-color: green; */
-}
-
-html {
-    /* background-color: blue; */
-}
-
 #root {
     position: relative;
     height: 100vh;
     width: 100vw;
-
-    /* background-color: yellow; */
 }
 
 :root {
@@ -50,4 +40,29 @@ img {
     height: 100%;
     inset: 0;
     overflow: auto;
+}
+
+@media (max-width: 1200px) {
+    :root {
+        font-size: 12px;
+    }
+}
+
+*::-webkit-scrollbar-track {
+    background: #27272727;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #a1a1a1;
+    border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #c1c1c1;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-radius: 1rem;
 }

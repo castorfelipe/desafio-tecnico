@@ -1,18 +1,18 @@
+import { Cover } from "@/components/atoms/Cover";
 import { MovieItemRating } from "@/components/molecules/MovieItem/styles";
-import tmdb from "@/services/tmdb";
 import useOnScreen from "@/hooks/useOnScreen";
+import tmdb from "@/services/tmdb";
 import animations from "@/utils/animations";
 import {
     calculateAge,
-    getMultiSearchData,
-    getTmdbPosterPathUrl,
+    getMultiSearchData
 } from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { LuStar, LuUser } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { MultiSearchResult, PersonDetails } from "tmdb-ts";
-import { useNavigate } from "react-router-dom";
 
 const Container = styled(motion.div)`
     display: flex;
@@ -31,6 +31,7 @@ const Container = styled(motion.div)`
         border: 2px solid var(--colors-secondary-borders-6, #3a3a3a);
         background-color: #3a3a3a;
         height: 5.4rem;
+        min-width: fit-content;
         aspect-ratio: 1280/1920;
     }
 
@@ -89,7 +90,6 @@ const Container = styled(motion.div)`
         text-overflow: ellipsis;
         font-size: 0.8125rem;
         font-weight: 500;
-        /* line-height: 0.9rem; */
     }
 
     &:hover {
@@ -161,9 +161,11 @@ export default function SearchBarItem({
             transition={{ delay: index * 0.1, duration: 0.5 }}
         >
             {coverPath && (
-                <img
-                    src={getTmdbPosterPathUrl(coverPath, "w500")}
-                    alt="cover"
+                <Cover
+                    posterPath={coverPath}
+                    $posterType={
+                        searchItem.media_type === "person" ? "person" : "movie"
+                    }
                 />
             )}
 

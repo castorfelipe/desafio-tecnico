@@ -1,11 +1,11 @@
 import { ButtonWithIcon } from "@/components/atoms/ButtonWithIcon";
+import { Cover } from "@/components/atoms/Cover";
 import {
     MovieItemContent,
     MovieItemHighlightTag,
     MovieItemRating,
 } from "@/components/molecules/MovieItem/styles";
 import { MainMovie } from "@/services/tmdb";
-import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import prettyMilliseconds from "pretty-ms";
 import { useRef } from "react";
 import { LuFlame, LuPlay, LuStar } from "react-icons/lu";
@@ -83,6 +83,31 @@ const Container = styled.div`
             filter: saturate(1.05);
         }
     }
+
+    @media (max-width: 1200px) {
+        &.carousel-item {
+            min-width: 15rem !important;
+            max-width: 15rem !important;
+
+            h2.movie-name {
+                font-size: 1rem;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        &.main-item {
+            p.description {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+            }
+        }
+    }
 `;
 
 export default function MovieItem({
@@ -107,13 +132,13 @@ export default function MovieItem({
             onPointerDown={(e) => (clickPointRef.current = e.screenX)}
         >
             <div className="image-wrapper">
-                <img
-                    src={getTmdbPosterPathUrl(
+                <Cover
+                    posterPath={
                         shouldUsePoster
                             ? movie.poster_path!
-                            : movie.backdrop_path!,
-                    )}
-                    alt=""
+                            : movie.backdrop_path!
+                    }
+                    $posterType="movie"
                 />
             </div>
             <MovieItemContent>
@@ -140,7 +165,7 @@ export function MainMovieItem({ movie }: { movie: MainMovie }) {
             onClick={() => navigateTo(`/movie/${movie.id}`)}
         >
             <div className="image-wrapper">
-                <img src={getTmdbPosterPathUrl(movie.backdrop_path)} alt="" />
+                <Cover posterPath={movie.backdrop_path} $posterType="movie" />
             </div>
             <MovieItemContent className="main-item">
                 <MovieItemHighlightTag className="no-margin">

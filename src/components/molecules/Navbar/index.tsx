@@ -25,6 +25,14 @@ const Container = styled.nav`
     a {
         cursor: pointer;
     }
+
+    @media (max-width: 800px) {
+        flex-direction: column;
+        gap: 1.5rem;
+        .invisible {
+            display: none;
+        }
+    }
 `;
 
 export default function Navbar() {

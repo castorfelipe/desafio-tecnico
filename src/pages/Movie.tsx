@@ -1,12 +1,12 @@
 import { ButtonWithIcon } from "@/components/atoms/ButtonWithIcon";
 import CarouselSection from "@/components/atoms/CarouselSection";
+import { Cover } from "@/components/atoms/Cover";
 import { LoadingSmall } from "@/components/atoms/Loading";
 import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem from "@/components/molecules/MovieItem";
 import Navbar from "@/components/molecules/Navbar";
 import tmdb from "@/services/tmdb";
 import animations from "@/utils/animations";
-import { getTmdbPosterPathUrl } from "@/utils/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import prettyMilliseconds from "pretty-ms";
 import { useEffect, useMemo, useState } from "react";
@@ -22,6 +22,7 @@ const Container = styled(motion.div)`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
     .banner-wrapper {
         position: relative;
         width: 100%;
@@ -145,6 +146,7 @@ const Container = styled(motion.div)`
         .title-area {
             display: flex;
             gap: 0.75rem;
+            flex-wrap: wrap;
         }
         h2.title {
             color: #fff;
@@ -192,6 +194,19 @@ const Container = styled(motion.div)`
             font-size: 1.25rem;
             font-weight: 500;
             line-height: 1.75rem;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .details {
+            flex-direction: column;
+        }
+        gap: 2rem;
+
+        button.watch-trailer {
+            left: 1rem !important;
+            bottom: 1rem !important;
+            width: calc(100% - 2rem);
         }
     }
 `;
@@ -266,7 +281,10 @@ export default function Movie() {
             {movie && (
                 <div className="top-area">
                     <div className="banner-wrapper">
-                        <img src={getTmdbPosterPathUrl(movie?.backdrop_path)} />
+                        <Cover
+                            posterPath={movie?.backdrop_path}
+                            $posterType="movie"
+                        />
                         <ButtonWithIcon className="watch-trailer">
                             Assistir ao trailer <LuPlay />
                         </ButtonWithIcon>

@@ -56,7 +56,12 @@ const Container = styled(motion.div)`
         }
     }
 
-    section.new-movies {
+    @media (max-width: 900px) {
+        section.main {
+            .column {
+                display: none;
+            }
+        }
     }
 `;
 
@@ -121,7 +126,7 @@ function App() {
     return (
         <Container {...animations.fadeInOut(0.3)} className="page">
             <AnimatePresence>
-                {isLoading && <LoadingSmall size={3} solid={true}/>}
+                {isLoading && <LoadingSmall size={3} solid={true} />}
             </AnimatePresence>
             <Navbar />
 
