@@ -5,6 +5,7 @@ import {
     MovieItemHighlightTag,
     MovieItemRating,
 } from "@/components/molecules/MovieItem/styles";
+import { handleSearchTrailer } from "@/services/invidius";
 import { MainMovie } from "@/services/tmdb";
 import prettyMilliseconds from "pretty-ms";
 import { useRef } from "react";
@@ -148,7 +149,10 @@ export default function MovieItem({
                 </MovieItemRating>
 
                 <h2 className="movie-name">{movie.title}</h2>
-                <ButtonWithIcon className="watch-trailer">
+                <ButtonWithIcon
+                    className="watch-trailer"
+                    onClick={handleSearchTrailer(movie.title)}
+                >
                     Assistir ao trailer <LuPlay />
                 </ButtonWithIcon>
             </MovieItemContent>
@@ -191,7 +195,10 @@ export function MainMovieItem({ movie }: { movie: MainMovie }) {
                 </div>
                 <p className="description">{movie.overview}</p>
 
-                <ButtonWithIcon className="watch-trailer main-item">
+                <ButtonWithIcon
+                    className="watch-trailer main-item"
+                    onClick={handleSearchTrailer(movie.title)}
+                >
                     Assistir ao trailer <LuPlay />
                 </ButtonWithIcon>
             </MovieItemContent>

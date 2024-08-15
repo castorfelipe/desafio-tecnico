@@ -5,6 +5,7 @@ import { LoadingSmall } from "@/components/atoms/Loading";
 import ActorItem from "@/components/molecules/ActorItem";
 import MovieItem from "@/components/molecules/MovieItem";
 import Navbar from "@/components/molecules/Navbar";
+import { handleSearchTrailer } from "@/services/invidius";
 import tmdb from "@/services/tmdb";
 import animations from "@/utils/animations";
 import { AnimatePresence, motion } from "framer-motion";
@@ -285,7 +286,10 @@ export default function Movie() {
                             posterPath={movie?.backdrop_path}
                             $posterType="movie"
                         />
-                        <ButtonWithIcon className="watch-trailer">
+                        <ButtonWithIcon
+                            className="watch-trailer"
+                            onClick={handleSearchTrailer(movie.title)}
+                        >
                             Assistir ao trailer <LuPlay />
                         </ButtonWithIcon>
                     </div>
