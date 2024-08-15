@@ -68,7 +68,7 @@ function App() {
     const [recommendations, setRecomenndations] = useState<
         Recommendation[] | null
     >(null);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
@@ -112,8 +112,6 @@ function App() {
         setActors(actors.results);
         setLoading(false);
     };
-
-    // console.log(mainMovie);
 
     useEffect(() => {
         if (newMovies) return;
@@ -177,10 +175,6 @@ function App() {
                     </CarouselSection>
                 </section>
             )}
-
-            <p className="copyright-notice">
-                © 2024 Rader. All rights reserved
-            </p>
         </Container>
     );
 }

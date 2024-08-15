@@ -32,6 +32,11 @@ const Container = styled.div`
         align-items: center;
         background-color: #232323;
         border-radius: 50%;
+
+        transition: 0.1s;
+        &:hover {
+            background-color: #272727;
+        }
     }
 
     svg {
