@@ -1,3 +1,3 @@
-# Desafio técnico Orquestre: Front End Pleno
+# Take-home test for Orquestre's Front-end role
 
-- Link de produção: https://desafio-tecnico.pages.dev
+- Production url: https://desafio-tecnico.pages.dev
